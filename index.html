@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İyi Ki Doğdun! 🎉 Patlayan Eğlence!</title>
+    <style>
+        /* Genel Stil Ayarları */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #FF6F61 0%, #DE4C8A 100%);
+            /* Canlı ve değişen arka plan */
+            font-family: 'Poppins', sans-serif;
+            /* Daha modern bir font */
+            overflow: hidden;
+            /* Konfetinin dışarı taşmasını sağlar */
+            position: relative;
+            cursor: pointer;
+            /* Tıklanabilir olduğunu belirtir */
+            transition: background-color 1s ease-in-out;
+            /* Arka plan renk geçişi */
+        }
+
+        /* Dışarıdan Poppins fontu ekleme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&display=swap');
+
+        /* Ana Başlık Stili */
+        .dogumgunu-mesaji {
+            font-size: 6vw;
+            /* Ekran boyutuna göre ayarlanır */
+            color: white;
+            text-shadow: 6px 6px 12px rgba(0, 0, 0, 0.5);
+            letter-spacing: 6px;
+            padding: 30px 60px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            animation: pulse 2s infinite alternate, floating 4s infinite alternate;
+            /* Canlı nabız ve yüzme animasyonu */
+            position: relative;
+            z-index: 100;
+            /* Her şeyin üstünde görünür */
+            user-select: none;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+            /* Daha parlak bir gölge */
+        }
+
+        /* Nabız Atışı Animasyonu */
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Yüzme Animasyonu */
+        @keyframes floating {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Konfeti Stili */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #ffeb3b;
+            opacity: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            /* Mesajın altında kalır */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Baloncuk/Patlama Parçacık Stili */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: currentColor;
+            /* Renk, JavaScript tarafından ayarlanır */
+            opacity: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 200;
+            /* Her şeyin üstünde */
+        }
+
+        /* Daha küçük ekranlar için yazı boyutunu ayarla */
+        @media (max-width: 768px) {
+            .dogumgunu-mesaji {
+                font-size: 10vw;
+                padding: 20px 40px;
+                letter-spacing: 3px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dogumgunu-mesaji">
+        🥳 İyi Ki Doğdun! 🌟<br>
+        Tıkla ve Eğlen!
+    </div>
+
+    <script>
+        // Rastgele bir renk üretme fonksiyonu
+        function getRandomColor() {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#F7CAC9', '#92A8D1', '#F7786B', '#CBECEF'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Arka plan rengini rastgele değiştirme
+        function changeBackgroundGradient() {
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            document.body.style.background = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
+        }
+
+        // Konfeti oluşturma fonksiyonu
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            document.body.appendChild(confetti);
+
+            const size = Math.random() * 6 + 4; // 4px ile 10px arası
+            confetti.style.width = `${size}px`;
+            confetti.style.height = `${size}px`;
+            confetti.style.backgroundColor = getRandomColor();
+
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.top = `${-size}px`;
+
+            const duration = Math.random() * 2 + 3; // 3s ile 5s arası düşme süresi
+            const spin = Math.random() * 360; // Başlangıç dönüş açısı
+
+            confetti.animate([
+                { transform: `translateY(0) rotate(${spin}deg)`, opacity: 0 },
+                { transform: `translateY(100vh) rotate(${spin + 1080}deg) translateX(${Math.random() * 200 - 100}px)`, opacity: 1 }
+            ], {
+                duration: duration * 1000,
+                easing: 'ease-out',
+                fill: 'forwards'
+            }).onfinish = () => confetti.remove();
+        }
+
+        // Baloncuk/Patlama Parçacık oluşturma fonksiyonu
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            document.body.appendChild(particle);
+
+            const size = Math.random() * 10 + 5; // 5px ile 15px arası
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.backgroundColor = getRandomColor();
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.opacity = 1;
+
+            const angle = Math.random() * Math.PI * 2; // Rastgele yön
+            const velocity = Math.random() * 150 + 50; // 50px/s ile 200px/s arası
+            const duration = Math.random() * 1.5 + 0.5; // 0.5s ile 2s arası
+
+            const targetX = x + Math.cos(angle) * velocity;
+            const targetY = y + Math.sin(angle) * velocity;
+
+            particle.animate([
+                { transform: `translate(0, 0) scale(1)`, opacity: 1 },
+                { transform: `translate(${targetX - x}px, ${targetY - y}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                easing: 'ease-out',
+                fill: 'forwards'
+            }).onfinish = () => particle.remove();
+        }
+
+        // Tıklama veya dokunma olayında patlama efekti
+        document.body.addEventListener('click', (e) => {
+            for (let i = 0; i < 20; i++) { // Her tıklamada 20 tane parçacık oluştur
+                createParticle(e.clientX, e.clientY);
+            }
+            changeBackgroundGradient(); // Her tıklamada arka plan rengini değiştir
+        });
+
+        // Sayfa yüklendiğinde konfeti yağmurunu başlat
+        window.onload = function () {
+            // İlk başta yoğun bir konfeti patlaması
+            for (let i = 0; i < 150; i++) {
+                setTimeout(createConfetti, i * 20);
+            }
+            // Ardından daha seyrek ama sürekli konfeti yağmuru
+            setInterval(createConfetti, 300); // Her 300ms'de bir konfeti
+
+            // Arka plan rengini düzenli olarak değiştir
+            setInterval(changeBackgroundGradient, 5000); // Her 5 saniyede bir renk değiştir
+        };
+
+    </script>
+</body>
+
+</html>
